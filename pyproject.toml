@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "statica"
+version = "0.1.0"
+description = ""
+authors = ["Volodymyr But <vbut.dev+git@gmail.com>"]
+packages = [{ include = "statica", from = "src" }]
+
+[tool.poetry.scripts]
+statica = "statica.cli:app"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
