@@ -32,6 +32,24 @@ def _option_p(name, required=True):
     return decorator
 
 
+def _option_q(name, required=True):
+    def decorator(function):
+        function = click.option(
+            name,
+            "-q",
+            "--q",
+            type=click.FloatRange(
+                min=0, max=1, min_open=False, max_open=False, clamp=False
+            ),
+            required=required,
+            help="Probability of the random variable X being less or equal than x",
+        )(function)
+
+        return function
+
+    return decorator
+
+
 @click.group()
 def binomial():
     pass
@@ -97,5 +115,42 @@ def cdf(n, p, operator):
     click.echo(output)
 
 
+@click.command()
+@_option_q(name="q")
+@_option_n(name="n")
+@_option_p(name="p")
+@click.option("operator", "--lt", flag_value="lt")
+@click.option("operator", "--gt", flag_value="gt")
+@click.option("operator", "--leq", flag_value="leq", default=True)
+@click.option("operator", "--geq", flag_value="geq")
+def ppf(q, n, p, operator):
+    def leq(q, n, p):
+        return binom.ppf(q, n, p)
+
+    def lt(q, n, p):
+        return leq(q, n, p) + 1
+
+    def geq(q, n, p):
+        return leq(1 - q, n, p)
+
+    def gt(q, n, p):
+        return geq(q, n, p) - 1
+
+    out = None
+
+    match operator:
+        case "lt":
+            out = lt(q, n, p)
+        case "gt":
+            out = gt(q, n, p)
+        case "leq":
+            out = leq(q, n, p)
+        case "geq":
+            out = geq(q, n, p)
+
+    click.echo(out)
+
+
 binomial.add_command(pmf)
 binomial.add_command(cdf)
+binomial.add_command(ppf)
