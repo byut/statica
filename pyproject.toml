@@ -5,6 +5,9 @@ description = ""
 authors = ["Volodymyr But <vbut.dev+git@gmail.com>"]
 packages = [{ include = "statica", from = "src" }]
 
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+
 [tool.poetry.scripts]
 statica = "statica.cli:app"
 
