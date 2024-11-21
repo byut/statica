@@ -8,6 +8,7 @@ packages = [{ include = "statica", from = "src" }]
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 click = "^8.1.7"
+logging = "^0.4.9.6"
 
 [tool.poetry.scripts]
 statica = "statica.cli:app"
